@@ -23,12 +23,12 @@ const LoginPage: React.FC = () => {
       });
 
       const data = await response.json();
-
       if (response.ok) {
         // Simpan token di localStorage
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("userRole", data.data.user.role);
-
+        console.log(data)
+        console.log(data.data.user.id)
         // Arahkan ke dashboard
         router.push("/dashboard");
       } else {

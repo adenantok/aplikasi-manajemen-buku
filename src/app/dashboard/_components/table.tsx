@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface Book {
@@ -12,6 +13,7 @@ interface Book {
 export const Dashboard = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [token, setToken] = useState<string | null>(null);
+  const router = useRouter();
 
   async function fetchBooks() {
     if (!token) return;
@@ -47,7 +49,17 @@ export const Dashboard = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-4 text-gray-800">Dashboard Buku</h1>
+      <div className="flex justify-end">
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => {
+            console.log("Add button clicked!");
+            router.push("/add");
+          }}
+        >
+          Tambah Buku
+        </button>
+      </div>
       {books.length === 0 ? (
         <p className="text-gray-600">Data buku belum tersedia.</p>
       ) : (
