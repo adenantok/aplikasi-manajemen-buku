@@ -15,8 +15,12 @@ export const Dashboard = () => {
   const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
 
-  async function fetchBooks() {
-    if (!token) return;
+  async function fetchBooksFromServer() {
+    // if (!token) {
+    //   console.error("Token not found, redirecting to login...");
+    //   router.push("/login");
+    //   return;
+    // }
 
     try {
       const response = await fetch("http://localhost:8080/books", {
@@ -27,24 +31,34 @@ export const Dashboard = () => {
         },
       });
 
-      if (response.ok) {
-        const result = await response.json();
-        if (result.status === "success" && Array.isArray(result.data)) {
-          setBooks(result.data);
-        }
+      //if (!response.ok) return;
+
+      const jsonData = await response.json();
+      console.log(token)
+      console.log("Response from server:", jsonData);
+      console.log(jsonData);
+      if (jsonData.status === "success" && Array.isArray(jsonData.data)) {
+        setBooks(jsonData.data);
       }
     } catch (error) {
-        console.error("Error fetching books:", error);
-      }
+      console.error("Error fetching books:", error);
+      router.push("/login");
+    }
   }
+
 
   useEffect(() => {
     const tokenFromStorage = localStorage.getItem("token");
-    if (tokenFromStorage) setToken(tokenFromStorage);
+    if (tokenFromStorage) {
+      setToken(tokenFromStorage);
+    } else {
+      router.push("/login"); // Redirect ke halaman login jika token tidak ditemukan
+    }
   }, []);
+  
 
   useEffect(() => {
-    fetchBooks();
+    fetchBooksFromServer();
   }, [token]);
 
   return (

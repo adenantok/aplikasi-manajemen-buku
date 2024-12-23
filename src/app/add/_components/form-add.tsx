@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation';
+
 
 export default function FormAdd() {
-    const [userid, setUserid] = useState('');
+    const [user_id, setUserid] = useState('');
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [description, setDescription] = useState('');
     const [token, setToken] = useState<string | null>(null);
+    const router = useRouter();
 
     useEffect(() => {
         const tokenFromStorage = localStorage.getItem("token");
@@ -14,20 +17,27 @@ export default function FormAdd() {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(userid, title, author, description);
+        
+        console.log(user_id, title, author, description);
 
         const sendData = async () => {
+            const userIdFromStorage = localStorage.getItem("userId");
+            const user_id = userIdFromStorage ? parseInt(userIdFromStorage, 10) : 0;
             try {
+                const data1 = { user_id : user_id,  title, author, description };
+                
                 const response = await fetch('http://localhost:8080/books', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `${token}`,
                     },
-                    body: JSON.stringify({ userid, title, author, description }),
+                    body: JSON.stringify(data1),
                 });
                 const data = await response.json();
                 console.log(data);
+                console.log(data1)
+                router.push('/dashboard');
             } catch (error) {
                 console.error(error);
             }
@@ -41,8 +51,8 @@ export default function FormAdd() {
         <label className="block">
           <span className="text-gray-700">User ID:</span>
           <input
-            type="text"
-            value={userid}
+            type="hidden"
+            value={user_id}
             onChange={e => setUserid(e.target.value)}
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           />

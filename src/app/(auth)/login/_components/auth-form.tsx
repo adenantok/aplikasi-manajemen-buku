@@ -27,6 +27,7 @@ const LoginPage: React.FC = () => {
         // Simpan token di localStorage
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("userRole", data.data.user.role);
+        localStorage.setItem("userId", data.data.user.id);
         console.log(data)
         console.log(data.data.user.id)
         // Arahkan ke dashboard
