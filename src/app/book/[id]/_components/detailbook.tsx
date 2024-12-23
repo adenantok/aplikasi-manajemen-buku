@@ -19,7 +19,7 @@ export default function DetailBook() {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  async function fetchBookFromServer() {
+  async function fetchBookById() {
     if (!token) {
       //console.error("Token not found, redirecting to login...");
       router.push("/login");
@@ -48,7 +48,7 @@ export default function DetailBook() {
 
   useEffect(() => {
     if (id) {
-      fetchBookFromServer();
+        fetchBookById();
     }
   }, [id]);
 

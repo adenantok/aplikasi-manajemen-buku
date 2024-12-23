@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import DeleteById from "./deletebyid";
 
 interface Book {
   id: number;
@@ -21,9 +22,8 @@ export const Dashboard = () => {
     //   router.push("/login");
     //   return;
     // }
-
     try {
-      const response = await fetch("http://localhost:8080/books", {
+      const response = await fetch(`http://localhost:8080/books`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export const Dashboard = () => {
       }
     } catch (error) {
       console.error("Error fetching books:", error);
-      router.push("/login");
+      //router.push("/login");
     }
   }
 
@@ -50,14 +50,16 @@ export const Dashboard = () => {
     if (tokenFromStorage) {
       setToken(tokenFromStorage);
     } else {
-      router.push("/login"); // Redirect ke halaman login jika token tidak ditemukan
+      router.push("/login"); // Redirect jika token tidak ditemukan
     }
-  }, []);
+  }, []); // Dipanggil hanya saat komponen pertama kali dimuat
   
-
   useEffect(() => {
-    fetchBooksFromServer();
-  }, [token]);
+    if (token) {
+      fetchBooksFromServer();
+    }
+  }, [token]); // Dipanggil hanya saat `token` diperbarui
+  
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -116,8 +118,8 @@ export const Dashboard = () => {
                       <button
                         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                         onClick={() => {
-                          console.log(`Delete button clicked for book ${book.id}`);
-                          // TODO: Implement delete logic
+                          
+                          DeleteById(book.id);
                         }}
                       >
                         Hapus
