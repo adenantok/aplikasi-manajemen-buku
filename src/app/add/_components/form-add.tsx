@@ -46,15 +46,14 @@ export default function FormAdd() {
     }
 
   return (
+    <div className="p-6 bg-gray-50 min-h-screen">
     <form onSubmit={handleSubmit} className="space-y-4 px-4 py-6 bg-white rounded-md border shadow-md">
       <div className="grid grid-cols-1 gap-4">
         <label className="block">
-          <span className="text-gray-700">User ID:</span>
           <input
             type="hidden"
             value={user_id}
             onChange={e => setUserid(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           />
         </label>
         <label className="block">
@@ -91,6 +90,7 @@ export default function FormAdd() {
         Simpan
       </button>
     </form>
+    </div>
   )
 }
 
